@@ -1,2 +1,2 @@
-# AutoSeater
-Takes in an excel sheet of registrants and automatically assigns them to tables
+# AutoSeater for the Air Force Ball
+Takes in an csv sheet of registrants and automatically assigns them to tables
