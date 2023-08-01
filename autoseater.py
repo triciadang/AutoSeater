@@ -7,9 +7,6 @@ def what_table_number(number_in_group):
     table_number = 1
     table_found = 0
 
-    if number_in_group > 8:
-        print("NEED HELP")
-
     while table_found == 0:
         if SEATING_TABLE[str(table_number)] >= number_in_group:
             table_number = str(table_number)
@@ -50,24 +47,36 @@ def main():
                     singular_group.append(row)
                     number_in_group += 1
                 else:
-                    table_num = what_table_number(number_in_group)
-                    for each in singular_group:
-                        print(each)
-                        each.append(table_num)
-                        writer.writerow(each)
+                    #number_in_group <= 8
+                    if number_in_group <= 8:
+                        table_num = what_table_number(number_in_group)
+                        for each in singular_group:
+                            each.append(table_num)
+                            writer.writerow(each)
 
-                    #need to change
-                    #table_num += 1
+                    #if there are more than 8 people that registered together
+                    else:
+                        n = 0
+                        overall_number_in_group = number_in_group
+                        while number_in_group > 8:
+                            table_num = what_table_number(8)
+                            for i in range(8 * n + 0, 8 * n + 8):
+                                singular_group[i].append(table_num)
+                                writer.writerow(singular_group[i])
+                            n += 1
+                            number_in_group -= 8
+
+                        table_num = what_table_number(number_in_group)
+                        for i in range(8*n + 0, overall_number_in_group):
+                            singular_group[i].append(table_num)
+                            writer.writerow(singular_group[i])
+
                     #new one is only one in group
                     singular_group = []
                     singular_group.append(row)
                     number_in_group = 1
 
                 prev_row = row
-
-
-    #parse csv
-
 
 
 if __name__ == "__main__":
