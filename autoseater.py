@@ -1,4 +1,5 @@
 import csv
+import easygui
 
 #global variable
 SEATING_TABLE = {str(i): 8 for i in range(1, 126)}
@@ -21,7 +22,8 @@ def what_table_number(number_in_group):
 def main():
 
     #import csv
-    with open("C:\\Users\\trici\\Downloads\\registrants (18).csv",'r') as csv_file:
+    path = easygui.fileopenbox()
+    with open(path,'r') as csv_file:
     #with open('C:\\Users\\taduser\\Documents\\EventBrite\\registrants.csv', 'r') as csv_file:
         reader = csv.reader(csv_file)
 
