@@ -16,7 +16,6 @@ def what_table_number(number_in_group):
         else:
             table_number += 1
 
-
     return table_number
 
 def main():
@@ -92,7 +91,6 @@ def main():
             for i in range(8 * n + 0, overall_number_in_group):
                 singular_group[i].append(table_num)
                 writer.writerow(singular_group[i])
-
 
 if __name__ == "__main__":
    main()
