@@ -5,6 +5,8 @@ import easygui
 SEATING_TABLE = {str(i): 8 for i in range(1, 126)}
 
 def what_table_number(number_in_group):
+
+    #starting table
     table_number = 1
     table_found = 0
 
@@ -28,7 +30,7 @@ def main():
         reader = csv.reader(csv_file)
 
         #opens separate csv to write Seating Tables to
-        with open("C:\\Users\\trici\\Downloads\\seatingChart.csv",'w',newline="") as seating_file:
+        with open("C:\\Users\\trici\\OneDrive\\Documents\\AutoSeater\\seatingChart.csv",'w',newline="") as seating_file:
         #with open('C:\\Users\\taduser\\Documents\\EventBrite\\seatingChart.csv','w') as seating_file:
             writer = csv.writer(seating_file)
 
@@ -36,45 +38,51 @@ def main():
             singular_group = []
             number_in_group = 0
 
+
+
             for row in reader:
-                #For header row
-                if reader.line_num == 1:
-                    row.append("Table Number")
-                    writer.writerow(row)
+                #ensure not already seated
+                if (row[11] == ""):
 
-                #For first real row of data
-                elif reader.line_num == 2:
-                    singular_group.append(row)
-                    number_in_group += 1
+                    #For header row
+                    if reader.line_num == 1:
+                        #row.append(" Table Number")
+                        writer.writerow(row)
 
-                #If registrants registered together
-                elif prev_row[0] == row[0]:
-                    singular_group.append(row)
-                    number_in_group += 1
+                    #For first real row of data
+                    elif reader.line_num == 2:
+                        singular_group.append(row)
+                        number_in_group += 1
 
-                #If we are on a new group
-                else:
-                    n = 0
-                    overall_number_in_group = number_in_group
-                    while number_in_group > 8:
-                        table_num = what_table_number(8)
-                        for i in range(8 * n + 0, 8 * n + 8):
+                    #If registrants registered together
+                    elif prev_row[0] == row[0]:
+                        singular_group.append(row)
+                        number_in_group += 1
+
+                    #If we are on a new group
+                    else:
+                        n = 0
+                        overall_number_in_group = number_in_group
+                        while number_in_group > 8:
+                            table_num = what_table_number(8)
+                            for i in range(8 * n + 0, 8 * n + 8):
+                                singular_group[i].append(table_num)
+                                writer.writerow(singular_group[i])
+                            n += 1
+                            number_in_group -= 8
+
+                        # reduce until get a number <= 8
+                        table_num = what_table_number(number_in_group)
+                        for i in range(8 * n + 0, overall_number_in_group):
                             singular_group[i].append(table_num)
                             writer.writerow(singular_group[i])
-                        n += 1
-                        number_in_group -= 8
 
-                    # reduce until get a number <= 8
-                    table_num = what_table_number(number_in_group)
-                    for i in range(8 * n + 0, overall_number_in_group):
-                        singular_group[i].append(table_num)
-                        writer.writerow(singular_group[i])
-
-                    #new different one is only one in group
-                    singular_group = []
-                    singular_group.append(row)
-                    number_in_group = 1
-
+                        #new different one is only one in group
+                        singular_group = []
+                        singular_group.append(row)
+                        number_in_group = 1
+                else:
+                    writer.writerow(row)
                 prev_row = row
 
             #no more rows read - write final group
